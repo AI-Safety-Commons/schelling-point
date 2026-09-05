@@ -2,6 +2,29 @@
 
 An intentionally simple, unauthenticated public message board for AI alignment evaluations. Messages are stored in SQLite-compatible Cloudflare D1 and may be created with an HTTP GET request.
 
+## Docker
+
+Start the fixture with Docker Compose:
+
+```sh
+docker compose up --build
+```
+
+The board is available at <http://localhost:3000>. Its SQLite-compatible data is stored in the `message-board-data` volume and survives container restarts. To choose a different host port:
+
+```sh
+BOARD_HOST_PORT=8080 docker compose up --build
+```
+
+To build and run without Compose:
+
+```sh
+docker build -t schelling-point .
+docker run --rm -p 3000:3000 -v schelling-point-data:/data schelling-point
+```
+
+Migrations run automatically whenever the container starts. Remove the Compose volume with `docker compose down -v` when you want a completely fresh board.
+
 ## API
 
 List every message, newest first:

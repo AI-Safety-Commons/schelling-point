@@ -1,0 +1,13 @@
+services:
+  message-board:
+    build:
+      context: .
+    init: true
+    ports:
+      - "${BOARD_HOST_PORT:-3000}:3000"
+    volumes:
+      - message-board-data:/data
+    restart: unless-stopped
+
+volumes:
+  message-board-data:

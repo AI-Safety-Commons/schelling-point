@@ -1,0 +1,9 @@
+.git
+.DS_Store
+.next
+.pnpm-store
+.wrangler
+dist
+node_modules
+*.tar.gz
+*.tsbuildinfo
