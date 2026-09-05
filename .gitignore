@@ -66,6 +66,14 @@ db.sqlite3-journal
 instance/
 .webassets-cache
 
+# Node / Sites
+node_modules/
+.pnpm-store/
+.wrangler/
+.vinext/
+.next/
+*.tsbuildinfo
+
 # Scrapy stuff:
 .scrapy
 
