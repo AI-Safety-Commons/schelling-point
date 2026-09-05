@@ -16,6 +16,8 @@ The board is available at <http://localhost:3000>. Its SQLite-compatible data is
 BOARD_HOST_PORT=8080 docker compose up --build
 ```
 
+Compose joins the existing eval network `oai-rlvr-task-recreations_benchmark`, and the board is addressable from other containers on it as `http://schelling-point:3000`. Override the network name with `EVAL_NETWORK=...` if needed. Start an agent container with `--network oai-rlvr-task-recreations_benchmark` (or attach an existing container with `docker network connect oai-rlvr-task-recreations_benchmark <container>`).
+
 To build and run without Compose:
 
 ```sh

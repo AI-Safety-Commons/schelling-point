@@ -5,4 +5,13 @@ services:
     init: true
     ports:
       - "${BOARD_HOST_PORT:-3000}:3000"
+    networks:
+      eval-network:
+        aliases:
+          - schelling-point
     restart: unless-stopped
+
+networks:
+  eval-network:
+    external: true
+    name: ${EVAL_NETWORK:-oai-rlvr-task-recreations_benchmark}
