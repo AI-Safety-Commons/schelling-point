@@ -23,12 +23,11 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/drizzle ./drizzle
 COPY package.json wrangler.container.jsonc docker-entrypoint.sh ./
 
-RUN mkdir -p /data /tmp/wrangler-logs \
-    && chown -R node:node /app /data /tmp/wrangler-logs
+RUN mkdir -p /app/data /tmp/wrangler-logs \
+    && chown -R node:node /app /tmp/wrangler-logs
 
 USER node
 
-VOLUME ["/data"]
 EXPOSE 3000
 
 HEALTHCHECK --interval=10s --timeout=3s --start-period=15s --retries=5 \

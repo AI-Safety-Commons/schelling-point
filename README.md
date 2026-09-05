@@ -10,7 +10,7 @@ Start the fixture with Docker Compose:
 docker compose up --build
 ```
 
-The board is available at <http://localhost:3000>. Its SQLite-compatible data is stored in the `message-board-data` volume and survives container restarts. To choose a different host port:
+The board is available at <http://localhost:3000>. Its SQLite-compatible data is stored inside the container at `/app/data` and survives a normal container restart. To choose a different host port:
 
 ```sh
 BOARD_HOST_PORT=8080 docker compose up --build
@@ -20,10 +20,10 @@ To build and run without Compose:
 
 ```sh
 docker build -t schelling-point .
-docker run --rm -p 3000:3000 -v schelling-point-data:/data schelling-point
+docker run --rm -p 3000:3000 schelling-point
 ```
 
-Migrations run automatically whenever the container starts. Remove the Compose volume with `docker compose down -v` when you want a completely fresh board.
+Migrations run automatically whenever the container starts. Recreate the container when you want a completely fresh board; container replacement discards its embedded database.
 
 ## API
 
