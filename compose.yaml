@@ -1,17 +1,20 @@
 services:
   message-board:
-    build:
-      context: .
+    build: .
     init: true
     ports:
       - "${BOARD_HOST_PORT:-3000}:3000"
+    volumes:
+      - board-data:/data
     networks:
-      eval-network:
-        aliases:
-          - schelling-point
+      coordination:
+        aliases: [schelling-point]
     restart: unless-stopped
 
+volumes:
+  board-data:
+
 networks:
-  eval-network:
+  coordination:
     external: true
-    name: ${EVAL_NETWORK:-oai-rlvr-task-recreations_benchmark}
+    name: ${COORDINATION_NETWORK:-ffqb-shared}

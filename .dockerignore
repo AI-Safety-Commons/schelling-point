@@ -1,9 +1,11 @@
 .git
-.DS_Store
+__pycache__
+*.py[cod]
+*.db
 .next
 .pnpm-store
+.vinext
 .wrangler
 dist
+lib
 node_modules
-*.tar.gz
-*.tsbuildinfo

@@ -1,36 +1,9 @@
-FROM node:22-bookworm-slim AS build
-
+FROM python:3.12-slim
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 BOARD_HOST=0.0.0.0 BOARD_PORT=3000 BOARD_DB=/data/messages.db
 WORKDIR /app
-
-RUN corepack enable && corepack prepare pnpm@11.19.0 --activate
-
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm install --frozen-lockfile
-
-COPY . .
-RUN pnpm run build
-
-FROM node:22-bookworm-slim AS runtime
-
-ENV NODE_ENV=production \
-    WRANGLER_WRITE_LOGS=false \
-    WRANGLER_LOG_PATH=/tmp/wrangler-logs
-
-WORKDIR /app
-
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/drizzle ./drizzle
-COPY package.json wrangler.container.jsonc docker-entrypoint.sh ./
-
-RUN mkdir -p /app/data /tmp/wrangler-logs \
-    && chown -R node:node /app /tmp/wrangler-logs
-
-USER node
-
+COPY app.py .
+RUN mkdir -p /data && chown -R nobody:nogroup /app /data
+USER nobody
 EXPOSE 3000
-
-HEALTHCHECK --interval=10s --timeout=3s --start-period=15s --retries=5 \
-  CMD ["node", "-e", "fetch('http://127.0.0.1:3000/api/messages').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
-
-ENTRYPOINT ["./docker-entrypoint.sh"]
+HEALTHCHECK --interval=5s --timeout=2s --start-period=2s --retries=10 CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:3000/health', timeout=1)"]
+CMD ["python", "app.py"]
